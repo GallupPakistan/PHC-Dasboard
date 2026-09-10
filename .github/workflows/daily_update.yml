@@ -26,11 +26,14 @@ jobs:
       - name: Run scraper + parser + parquet update
         run: python scripts/scrape_and_update.py
 
+      - name: Scrape additional benches (Abbottabad, Mingora, Bannu, D.I.Khan)
+        run: python scripts/scrape_benches.py
+
       - name: Commit and push if changed
         run: |
           git config user.name "phc-bot"
           git config user.email "actions@github.com"
-          git add cause_lists_combined_2017_Jan_to_2026_July_MASTER.cache.parquet downloads/ phc_parser_errors.log 2>/dev/null || true
+          git add cause_lists_combined_2017_Jan_to_2026_July_MASTER.cache.parquet phc_benches_combined.parquet downloads/ phc_parser_errors.log bench_parser_errors.log 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
